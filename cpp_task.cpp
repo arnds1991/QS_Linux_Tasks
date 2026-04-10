@@ -9,8 +9,8 @@ using namespace std::chrono_literals;
 
 void StartThread(
     std::thread& thread,
-    std::atomic<bool>& running,
-    const std::function<bool(void)>& Process,
+    std::atomic<bool> &running,
+    const std::function<bool(void)> Process,
     const std::chrono::seconds timeout)
 {
     thread = std::thread(
@@ -34,7 +34,7 @@ void StartThread(
 
 int main(int argc, char **argv)
 {
-    std::atomic<bool> my_running = true;
+    std::atomic<bool> my_running1 = true, my_running2 = true;
     std::thread my_thread1, my_thread2;
     int loop_counter1 = 0, loop_counter2 = 0;
 
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
     StartThread(
         my_thread1,
-        my_running, 
+        my_running1, 
         [&]()
         {
             // "some actions" simulated with waiting
@@ -51,10 +51,10 @@ int main(int argc, char **argv)
             return false;
         },
         10s); // loop timeout
-
+       
     StartThread(
         my_thread2,
-        my_running, 
+        my_running2, 
         [&]()
         {
             // "some actions" simulated with waiting 
