@@ -1,3 +1,10 @@
+/*
+ This program tries to start two threads doing two different actions.
+First thread is trying to increment loop_counter1 every 2 seconds, 
+Second thread is trying to increment loop_counter2 every 1 second, but only for 5 times. After that it should stop.
+Both the threads should stop after 10 seconds if they are still running.
+The main thread waits for both threads to finish and then prints the final values of loop_counter1 and loop_counter2.
+*/
 #include <atomic>
 #include <chrono>
 #include <functional>
@@ -8,9 +15,9 @@
 using namespace std::chrono_literals;
 
 void StartThread(std::thread &thread, std::atomic<bool> &running,
-                 const std::function<bool(void)> &Process,
+                 const std::function<bool(void)> Process,
                  const std::chrono::seconds timeout) {
-  thread = std::thread([&]() {
+  thread = std::thread([&running,Process,timeout]() {
     auto start = std::chrono::high_resolution_clock::now();
     while (running) {
       bool aborted = Process();
@@ -27,14 +34,14 @@ void StartThread(std::thread &thread, std::atomic<bool> &running,
 }
 
 int main(int argc, char **argv) {
-  std::atomic<bool> my_running = true;
+  std::atomic<bool> my_running1 = true, my_running2 = true;
   std::thread my_thread1, my_thread2;
   int loop_counter1 = 0, loop_counter2 = 0;
 
   // start actions in seprate threads and wait of them
 
   StartThread(
-      my_thread1, my_running,
+      my_thread1, my_running1,
       [&]() {
         // "some actions" simulated with waiting
         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
@@ -44,7 +51,7 @@ int main(int argc, char **argv) {
       10s); // loop timeout
 
   StartThread(
-      my_thread2, my_running,
+      my_thread2, my_running2,
       [&]() {
         // "some actions" simulated with waiting
         if (loop_counter2 < 5) {
