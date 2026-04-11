@@ -1,8 +1,15 @@
 def rotate_in_place(matrix):
-    n = len(matrix)
-    for r in range(n):
-        for c in range(n):
-            matrix[r][c] = matrix[n-c-1][r]
+    
+    # In case of rectangular matrix number of rows and number of columns are derived.    
+    # The number of rows and number of columns will swap after rotation in case of a rectangular matrix: m*n -> n*m    
+    number_of_columns = len(matrix)         #number of columns after rotation = number of rows before rotation
+    number_of_rows = len(matrix[0])         #number of rows after rotation = number of columns before rotation
+
+    rotated_matrix = [[0] * number_of_columns for i in range(number_of_rows)]
+    for r in range(number_of_rows):
+        for c in range(number_of_columns):
+            rotated_matrix[r][c] = matrix[number_of_columns-c-1][r] 
+    matrix[:]= rotated_matrix       
 
 
 MATRIX1 = [
@@ -10,6 +17,7 @@ MATRIX1 = [
     [ 5,  6,  7,  8],
     [ 9, 10, 11, 12],
     [13, 14, 15, 16]
+    
 ]
 
 EXPECTED1 = [
@@ -39,7 +47,24 @@ EXPECTED2 = [
     [49, 42, 35, 28, 21, 14,  7]
 ]
 
-for testcase, expected in ((MATRIX1, EXPECTED1), (MATRIX2, EXPECTED2)):
+MATRIX3 = [
+    [ 1,  2,  3,  4],
+    [ 5,  6,  7,  8],
+    [ 9, 10, 11, 12],
+    [13, 14, 15, 16],
+    [17, 18, 19, 20]    
+    
+]
+
+EXPECTED3 = [
+    [17, 13,  9,  5,  1],
+    [18, 14, 10,  6,  2],
+    [19, 15, 11,  7,  3],
+    [20, 16, 12,  8,  4]
+]
+
+
+for testcase, expected in ((MATRIX1, EXPECTED1), (MATRIX2, EXPECTED2), (MATRIX3, EXPECTED3)):
     rotate_in_place(testcase)
     if testcase != expected:
         print('Testcase failed. Actual vs. Expected:')
