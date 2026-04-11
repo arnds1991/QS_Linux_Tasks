@@ -1,3 +1,10 @@
+/*
+ This program tries to start two threads doing two different actions.
+First thread is trying to increment loop_counter1 every 2 seconds, 
+Second thread is trying to increment loop_counter2 every 1 second, but only for 5 times. After that it should stop.
+Both the threads should stop after 10 seconds if they are still running.
+The main thread waits for both threads to finish and then prints the final values of loop_counter1 and loop_counter2.
+*/
 #include <atomic>
 #include <chrono>
 #include <functional>
